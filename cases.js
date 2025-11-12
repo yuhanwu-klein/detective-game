@@ -1,357 +1,363 @@
-// Cases data structure
+// Cases data structure - All in English
 const CASES = [
     {
         id: 'jewelry',
-        type: '珠宝店失窃案',
-        title: '月光珠宝店失窃案',
-        description: '一家高档珠宝店在深夜被盗，价值数百万的钻石不翼而飞。',
+        type: 'Jewelry Store Theft',
+        title: 'Moonlight Jewelry Store Heist',
+        description: 'A high-end jewelry store was robbed late at night. Diamonds worth millions vanished without a trace.',
         sceneClass: 'scene-jewelry',
+        sceneColor: 0x654321,
         clues: [
             {
                 id: 'fingerprint',
-                name: '指纹',
-                description: '在展柜上发现的可疑指纹',
+                name: 'Fingerprint',
+                description: 'Suspicious fingerprint found on the display case',
                 icon: '👆',
-                position: { left: '45%', top: '60%' },
+                position: { x: 2, y: 1, z: 1 },
                 tool: 'magnifier',
                 hidden: false
             },
             {
                 id: 'footprint',
-                name: '脚印',
-                description: '地板上留下的特殊鞋印',
+                name: 'Footprint',
+                description: 'Special shoe print left on the floor',
                 icon: '👟',
-                position: { left: '30%', top: '75%' },
+                position: { x: -1, y: 0.1, z: 2 },
                 tool: 'flashlight',
                 hidden: true
             },
             {
                 id: 'glass',
-                name: '玻璃碎片',
-                description: '展柜破碎的玻璃，切口整齐',
+                name: 'Glass Shards',
+                description: 'Shattered display glass with clean cuts',
                 icon: '💎',
-                position: { left: '60%', top: '55%' },
+                position: { x: 0, y: 1.2, z: 0 },
                 tool: 'gloves',
                 hidden: false
             },
             {
                 id: 'hair',
-                name: '毛发',
-                description: '黑色毛发，可能属于窃贼',
+                name: 'Hair Sample',
+                description: 'Black hair, possibly belongs to the thief',
                 icon: '🧬',
-                position: { left: '50%', top: '45%' },
+                position: { x: 1.5, y: 0.5, z: -1 },
                 tool: 'testube',
                 hidden: true
             },
             {
                 id: 'camera',
-                name: '监控录像',
-                description: '店内监控显示一个戴口罩的身影',
+                name: 'Security Footage',
+                description: 'Store surveillance shows a masked figure',
                 icon: '📹',
-                position: { left: '80%', top: '30%' },
+                position: { x: -2, y: 2.5, z: -2 },
                 tool: 'camera',
                 hidden: false
             }
         ],
         solution: {
-            culprit: '珠宝店员工',
-            motive: '内部作案，熟悉店内布局和监控',
-            keywords: ['员工', '内部', '熟悉']
+            culprit: 'Store Employee',
+            motive: 'Inside job, familiar with store layout and surveillance',
+            keywords: ['employee', 'inside', 'familiar', 'staff']
         }
     },
     {
         id: 'apartment',
-        type: '公寓凶杀案',
-        title: '枫林公寓304号凶杀案',
-        description: '一位独居老人在家中被害，现场没有打斗痕迹。',
+        type: 'Apartment Murder',
+        title: 'Maple Apartments Unit 304 Murder',
+        description: 'An elderly resident was found dead in their home. No signs of struggle were present.',
         sceneClass: 'scene-apartment',
+        sceneColor: 0x463020,
         clues: [
             {
                 id: 'coffee',
-                name: '咖啡杯',
-                description: '桌上有两个咖啡杯，其中一个有口红印',
+                name: 'Coffee Cups',
+                description: 'Two coffee cups on the table, one with lipstick mark',
                 icon: '☕',
-                position: { left: '40%', top: '50%' },
+                position: { x: 0.5, y: 1, z: 0.5 },
                 tool: 'camera',
                 hidden: false
             },
             {
                 id: 'note',
-                name: '纸条',
-                description: '写着"今晚8点，老地方"的纸条',
+                name: 'Note',
+                description: 'Paper reading "8 PM tonight, usual place"',
                 icon: '📝',
-                position: { left: '55%', top: '40%' },
+                position: { x: 0.3, y: 1.05, z: 0.3 },
                 tool: 'magnifier',
                 hidden: false
             },
             {
                 id: 'poison',
-                name: '可疑粉末',
-                description: '咖啡杯底部有白色粉末残留',
+                name: 'Suspicious Powder',
+                description: 'White powder residue at bottom of coffee cup',
                 icon: '💊',
-                position: { left: '42%', top: '52%' },
+                position: { x: 0.5, y: 1.02, z: 0.5 },
                 tool: 'testube',
                 hidden: true
             },
             {
                 id: 'window',
-                name: '窗户',
-                description: '窗户从内侧反锁，无外来痕迹',
+                name: 'Window',
+                description: 'Window locked from inside, no external entry',
                 icon: '🪟',
-                position: { left: '75%', top: '35%' },
+                position: { x: -3, y: 1.5, z: -2 },
                 tool: 'flashlight',
                 hidden: false
             },
             {
                 id: 'photo',
-                name: '照片',
-                description: '一张老人和年轻女子的合影',
+                name: 'Photograph',
+                description: 'Photo of elderly victim with young woman',
                 icon: '🖼️',
-                position: { left: '25%', top: '40%' },
+                position: { x: -2, y: 1.6, z: 1 },
                 tool: 'camera',
                 hidden: false
             }
         ],
         solution: {
-            culprit: '侄女',
-            motive: '遗产继承，用毒药谋杀',
-            keywords: ['侄女', '遗产', '毒药', '口红']
+            culprit: 'Niece',
+            motive: 'Inheritance, murdered with poison',
+            keywords: ['niece', 'inheritance', 'poison', 'lipstick', 'relative']
         }
     },
     {
         id: 'museum',
-        type: '博物馆抢劫案',
-        title: '国家博物馆文物失窃案',
-        description: '价值连城的古代玉器在闭馆后神秘失踪。',
+        type: 'Museum Robbery',
+        title: 'National Museum Artifact Theft',
+        description: 'A priceless ancient jade artifact mysteriously disappeared after closing hours.',
         sceneClass: 'scene-museum',
+        sceneColor: 0x2c2c2c,
         clues: [
             {
                 id: 'display',
-                name: '展示柜',
-                description: '玻璃柜完好无损，但文物已经不见',
+                name: 'Display Case',
+                description: 'Glass case intact but artifact missing',
                 icon: '🏺',
-                position: { left: '50%', top: '55%' },
+                position: { x: 0, y: 1.2, z: 0 },
                 tool: 'magnifier',
                 hidden: false
             },
             {
                 id: 'blueprint',
-                name: '设计图纸',
-                description: '地上散落的博物馆建筑图纸',
+                name: 'Blueprint',
+                description: 'Museum architectural plans scattered on floor',
                 icon: '📐',
-                position: { left: '35%', top: '70%' },
+                position: { x: -1.5, y: 0.1, z: 1.5 },
                 tool: 'camera',
                 hidden: false
             },
             {
                 id: 'keycard',
-                name: '门禁卡',
-                description: '遗落的员工门禁卡',
+                name: 'Access Card',
+                description: 'Employee access card found dropped',
                 icon: '💳',
-                position: { left: '60%', top: '65%' },
+                position: { x: 1, y: 0.1, z: 1 },
                 tool: 'gloves',
                 hidden: false
             },
             {
                 id: 'tool',
-                name: '工具痕迹',
-                description: '展柜底部有撬动的痕迹',
+                name: 'Tool Marks',
+                description: 'Pry marks found at base of display case',
                 icon: '🔧',
-                position: { left: '48%', top: '60%' },
+                position: { x: 0.2, y: 0.8, z: 0.2 },
                 tool: 'flashlight',
                 hidden: true
             },
             {
                 id: 'dust',
-                name: '脚印尘土',
-                description: '地上的脚印带有特殊泥土',
+                name: 'Footprint Soil',
+                description: 'Footprints with unique soil composition',
                 icon: '🥾',
-                position: { left: '40%', top: '75%' },
+                position: { x: -0.5, y: 0.1, z: 2 },
                 tool: 'testube',
                 hidden: true
             }
         ],
         solution: {
-            culprit: '博物馆保安',
-            motive: '利用职务便利，内外勾结',
-            keywords: ['保安', '内部', '门禁', '职务']
+            culprit: 'Museum Security Guard',
+            motive: 'Inside-outside collusion using job privileges',
+            keywords: ['security', 'guard', 'inside', 'access', 'employee']
         }
     },
     {
         id: 'dock',
-        type: '码头枪击案',
-        title: '西区码头枪击案',
-        description: '深夜码头发生枪击事件，受害者身份不明。',
+        type: 'Dock Shooting',
+        title: 'West District Dock Shooting',
+        description: 'A late-night shooting occurred at the docks. Victim identity unknown.',
         sceneClass: 'scene-dock',
+        sceneColor: 0x001a33,
         clues: [
             {
                 id: 'bullet',
-                name: '弹壳',
-                description: '9mm手枪弹壳，专业军用',
+                name: 'Bullet Casing',
+                description: '9mm handgun casing, professional military grade',
                 icon: '🔫',
-                position: { left: '45%', top: '70%' },
+                position: { x: 0.5, y: 0.1, z: 1.5 },
                 tool: 'gloves',
                 hidden: false
             },
             {
                 id: 'blood',
-                name: '血迹',
-                description: '地面上的血迹延伸向水边',
+                name: 'Blood Trail',
+                description: 'Blood trail leading toward the water',
                 icon: '🩸',
-                position: { left: '55%', top: '65%' },
+                position: { x: 1, y: 0.1, z: 0.5 },
                 tool: 'flashlight',
                 hidden: false
             },
             {
                 id: 'cigarette',
-                name: '烟蒂',
-                description: '一个特殊品牌的烟蒂',
+                name: 'Cigarette Butt',
+                description: 'Rare brand cigarette butt',
                 icon: '🚬',
-                position: { left: '35%', top: '60%' },
+                position: { x: -1, y: 0.1, z: 1 },
                 tool: 'testube',
                 hidden: true
             },
             {
                 id: 'phone',
-                name: '手机',
-                description: '摔碎的手机，最后通话记录可见',
+                name: 'Cell Phone',
+                description: 'Smashed phone with visible call history',
                 icon: '📱',
-                position: { left: '50%', top: '75%' },
+                position: { x: 0, y: 0.1, z: 2 },
                 tool: 'camera',
                 hidden: false
             },
             {
                 id: 'tire',
-                name: '轮胎痕迹',
-                description: '逃跑车辆留下的轮胎印',
+                name: 'Tire Tracks',
+                description: 'Escape vehicle tire marks',
                 icon: '🚗',
-                position: { left: '70%', top: '80%' },
+                position: { x: 2, y: 0.1, z: 3 },
                 tool: 'magnifier',
                 hidden: false
             }
         ],
         solution: {
-            culprit: '黑帮成员',
-            motive: '帮派仇杀，专业作案',
-            keywords: ['黑帮', '仇杀', '军用', '专业']
+            culprit: 'Gang Member',
+            motive: 'Gang vendetta, professional hit',
+            keywords: ['gang', 'vendetta', 'military', 'professional', 'organized']
         }
     },
     {
         id: 'mansion',
-        type: '古宅纵火案',
-        title: '柳园古宅纵火案',
-        description: '百年老宅突发大火，疑似人为纵火。',
+        type: 'Mansion Arson',
+        title: 'Willow Manor Arson Case',
+        description: 'A century-old mansion caught fire. Suspected arson.',
         sceneClass: 'scene-mansion',
+        sceneColor: 0x1a0f00,
         clues: [
             {
                 id: 'gasoline',
-                name: '汽油味',
-                description: '空气中残留浓重的汽油味',
+                name: 'Gasoline Smell',
+                description: 'Strong gasoline odor lingers in the air',
                 icon: '⛽',
-                position: { left: '40%', top: '60%' },
+                position: { x: 0, y: 0.5, z: 0 },
                 tool: 'testube',
                 hidden: false
             },
             {
                 id: 'match',
-                name: '火柴',
-                description: '未燃尽的火柴梗',
+                name: 'Matches',
+                description: 'Partially burned matchstick',
                 icon: '🔥',
-                position: { left: '50%', top: '70%' },
+                position: { x: 0.5, y: 0.1, z: 1 },
                 tool: 'gloves',
                 hidden: false
             },
             {
                 id: 'will',
-                name: '遗嘱',
-                description: '半烧毁的遗嘱文件',
+                name: 'Will Document',
+                description: 'Half-burned last will and testament',
                 icon: '📜',
-                position: { left: '30%', top: '50%' },
+                position: { x: -1, y: 0.5, z: 0.5 },
                 tool: 'camera',
                 hidden: false
             },
             {
                 id: 'shoe',
-                name: '鞋印',
-                description: '灰烬中清晰的鞋印',
+                name: 'Shoe Print',
+                description: 'Clear shoe print in the ashes',
                 icon: '👞',
-                position: { left: '60%', top: '75%' },
+                position: { x: 1.5, y: 0.1, z: 1.5 },
                 tool: 'flashlight',
                 hidden: true
             },
             {
                 id: 'fabric',
-                name: '布料碎片',
-                description: '门把手上挂着的布料碎片',
+                name: 'Fabric Fragment',
+                description: 'Cloth fragment caught on door handle',
                 icon: '🧵',
-                position: { left: '75%', top: '50%' },
+                position: { x: -2, y: 1, z: -1 },
                 tool: 'magnifier',
                 hidden: true
             }
         ],
         solution: {
-            culprit: '继承人',
-            motive: '为了遗产，销毁遗嘱',
-            keywords: ['继承', '遗产', '遗嘱', '销毁']
+            culprit: 'Heir',
+            motive: 'Destroy will to claim inheritance',
+            keywords: ['heir', 'inheritance', 'will', 'destroy', 'beneficiary']
         }
     },
     {
         id: 'bank',
-        type: '银行抢劫案',
-        title: '中央银行抢劫案',
-        description: '光天化日之下，歹徒抢劫银行后逃之夭夭。',
-        sceneClass: 'scene-apartment', // 复用场景样式
+        type: 'Bank Robbery',
+        title: 'Central Bank Heist',
+        description: 'Armed robbers struck the bank in broad daylight and escaped.',
+        sceneClass: 'scene-apartment',
+        sceneColor: 0x463020,
         clues: [
             {
                 id: 'mask',
-                name: '面具',
-                description: '歹徒遗落的黑色面具',
+                name: 'Mask',
+                description: 'Black ski mask left behind by robber',
                 icon: '🎭',
-                position: { left: '45%', top: '55%' },
+                position: { x: 0, y: 0.5, z: 1 },
                 tool: 'gloves',
                 hidden: false
             },
             {
                 id: 'money',
-                name: '钞票',
-                description: '散落的钞票上有特殊标记',
+                name: 'Bills',
+                description: 'Scattered bills with special tracking marks',
                 icon: '💰',
-                position: { left: '35%', top: '65%' },
+                position: { x: -0.5, y: 0.1, z: 0.5 },
                 tool: 'magnifier',
                 hidden: false
             },
             {
                 id: 'security',
-                name: '监控记录',
-                description: '歹徒逃跑路线的监控录像',
+                name: 'Security Recording',
+                description: 'Surveillance footage of escape route',
                 icon: '📹',
-                position: { left: '70%', top: '35%' },
+                position: { x: 2, y: 2.5, z: -1 },
                 tool: 'camera',
                 hidden: false
             },
             {
                 id: 'note-threat',
-                name: '威胁纸条',
-                description: '歹徒留下的威胁字条',
+                name: 'Threatening Note',
+                description: 'Note left by robbers',
                 icon: '✉️',
-                position: { left: '50%', top: '45%' },
+                position: { x: 0.8, y: 1, z: 0.3 },
                 tool: 'flashlight',
                 hidden: true
             },
             {
                 id: 'dye',
-                name: '染料痕迹',
-                description: '防盗染料包爆炸的痕迹',
+                name: 'Dye Residue',
+                description: 'Security dye pack explosion traces',
                 icon: '🎨',
-                position: { left: '55%', top: '70%' },
+                position: { x: 1, y: 0.1, z: 1.5 },
                 tool: 'testube',
                 hidden: true
             }
         ],
         solution: {
-            culprit: '前银行员工',
-            motive: '熟悉内部，报复公司',
-            keywords: ['前员工', '报复', '熟悉', '内部']
+            culprit: 'Former Bank Employee',
+            motive: 'Knows internal layout, revenge against company',
+            keywords: ['former', 'employee', 'revenge', 'familiar', 'insider', 'ex-worker']
         }
     }
 ];

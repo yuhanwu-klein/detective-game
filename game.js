@@ -52,69 +52,60 @@ class SoundSystem {
 
 const soundSystem = new SoundSystem();
 
+// ===== 3D Scene Management =====
+let officeScene = null;
+let crimeScene3D = null;
+
 // ===== Page Management =====
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
     document.getElementById(pageId).classList.add('active');
+
+    // Start appropriate 3D scene
+    if (pageId === 'police-office' && officeScene) {
+        officeScene.start();
+        if (crimeScene3D) crimeScene3D.stop();
+    } else if (pageId === 'crime-scene' && crimeScene3D) {
+        crimeScene3D.start();
+        if (officeScene) officeScene.stop();
+    }
 }
 
 // ===== Police Office (Page 1) =====
 function initializePoliceOffice() {
-    const caseFiles = document.querySelectorAll('.case-file');
+    // Create 3D office scene
+    officeScene = new PoliceOfficeScene('office-canvas');
+    officeScene.onCaseFileClick = selectCaseFrom3D;
+
     const startBtn = document.getElementById('start-investigation');
 
     // Reset available cases
     GAME_STATE.availableCases = CASES.filter(c => !GAME_STATE.solvedCases.includes(c.id));
 
-    // Hover sound effects
-    caseFiles.forEach(file => {
-        file.addEventListener('mouseenter', () => {
-            soundSystem.paperSound();
-        });
-    });
-
     startBtn.addEventListener('click', () => {
         soundSystem.clickSound();
         shuffleCases();
     });
+
+    officeScene.start();
 }
 
 function shuffleCases() {
-    const caseFiles = document.querySelectorAll('.case-file');
-
-    // Add shuffling animation
-    caseFiles.forEach(file => {
-        file.classList.add('shuffling');
-    });
+    officeScene.shuffleFiles();
 
     setTimeout(() => {
-        caseFiles.forEach(file => {
-            file.classList.remove('shuffling');
-            file.classList.add('selectable');
-        });
-
-        // Make files clickable
-        caseFiles.forEach(file => {
-            file.addEventListener('click', selectCase);
-        });
+        // Enable clicking on files after shuffle
+        soundSystem.paperSound();
     }, 1000);
 }
 
-function selectCase(event) {
-    const caseFile = event.currentTarget;
-    const caseFiles = document.querySelectorAll('.case-file');
-
-    // Remove click listeners
-    caseFiles.forEach(file => {
-        file.removeEventListener('click', selectCase);
-        file.classList.remove('selectable');
-    });
+function selectCaseFrom3D(caseIndex) {
+    soundSystem.paperSound();
 
     // Select random case from available cases
     if (GAME_STATE.availableCases.length === 0) {
-        // All cases solved - show ending
         showEnding();
         return;
     }
@@ -122,20 +113,9 @@ function selectCase(event) {
     const randomIndex = Math.floor(Math.random() * GAME_STATE.availableCases.length);
     const selectedCase = GAME_STATE.availableCases[randomIndex];
 
-    // Show case type hint
-    caseFile.classList.add('selected');
-    const detailsDiv = caseFile.querySelector('.file-details');
-    detailsDiv.textContent = selectedCase.type;
-    detailsDiv.style.display = 'block';
-
-    soundSystem.paperSound();
-
     setTimeout(() => {
-        caseFile.classList.add('opened');
-        setTimeout(() => {
-            startCase(selectedCase);
-        }, 500);
-    }, 1000);
+        startCase(selectedCase);
+    }, 500);
 }
 
 // ===== Crime Scene (Page 2) =====
@@ -148,53 +128,41 @@ function startCase(caseData) {
     document.getElementById('case-title').textContent = caseData.title;
     updateProgress();
 
-    // Set scene background
-    const sceneBackground = document.getElementById('scene-background');
-    sceneBackground.className = 'scene-background ' + caseData.sceneClass;
+    // Create or update 3D crime scene
+    if (!crimeScene3D) {
+        crimeScene3D = new CrimeScene('scene-canvas');
+        crimeScene3D.onClueClick = handleClueClick;
+    }
 
-    // Clear previous hotspots
-    sceneBackground.innerHTML = '';
+    crimeScene3D.setupCrimeScene(caseData);
 
-    // Create hotspots for clues
-    caseData.clues.forEach(clue => {
-        const hotspot = document.createElement('div');
-        hotspot.className = 'hotspot' + (clue.hidden ? ' hidden' : '');
-        hotspot.dataset.clueId = clue.id;
-        hotspot.style.left = clue.position.left;
-        hotspot.style.top = clue.position.top;
-        hotspot.innerHTML = `<span style="font-size: 40px; opacity: 0.7;">${clue.icon}</span>`;
-
-        hotspot.addEventListener('click', () => {
-            handleClueClick(clue, hotspot);
-        });
-
-        sceneBackground.appendChild(hotspot);
-    });
+    // Clear evidence grid
+    document.getElementById('evidence-grid').innerHTML = '';
 
     showPage('crime-scene');
 }
 
-function handleClueClick(clue, hotspot) {
+function handleClueClick(clueData) {
     // Check if correct tool is selected
-    if (GAME_STATE.currentTool !== clue.tool && !GAME_STATE.foundClues.includes(clue.id)) {
-        // Tool not selected or wrong tool
+    if (GAME_STATE.currentTool !== clueData.tool && !GAME_STATE.foundClues.includes(clueData.id)) {
         soundSystem.errorSound();
-        showToolHint(clue.tool);
+        showToolHint(clueData.tool);
         return;
     }
 
-    if (GAME_STATE.foundClues.includes(clue.id)) {
-        // Already found
+    if (GAME_STATE.foundClues.includes(clueData.id)) {
         return;
     }
 
     // Found new clue!
     soundSystem.successSound();
-    GAME_STATE.foundClues.push(clue.id);
-    hotspot.classList.add('found');
+    GAME_STATE.foundClues.push(clueData.id);
+
+    // Mark clue as found in 3D scene
+    crimeScene3D.markClueAsFound(clueData.id);
 
     // Add to evidence board
-    addEvidence(clue);
+    addEvidence(clueData);
 
     updateProgress();
 
@@ -219,6 +187,15 @@ function showToolHint(toolName) {
         'notebook': '📄'
     };
 
+    const toolNames = {
+        'magnifier': 'Magnifying Glass',
+        'flashlight': 'Flashlight',
+        'camera': 'Camera',
+        'gloves': 'Gloves',
+        'testube': 'Test Tube',
+        'notebook': 'Notebook'
+    };
+
     const hint = document.createElement('div');
     hint.style.position = 'fixed';
     hint.style.top = '50%';
@@ -231,7 +208,7 @@ function showToolHint(toolName) {
     hint.style.fontSize = '24px';
     hint.style.zIndex = '9999';
     hint.style.border = '2px solid #d4af37';
-    hint.textContent = `需要使用工具: ${toolIcons[toolName]}`;
+    hint.textContent = `Need tool: ${toolIcons[toolName]} ${toolNames[toolName]}`;
 
     document.body.appendChild(hint);
 
@@ -246,7 +223,7 @@ function updateProgress() {
     const percentage = (found / total) * 100;
 
     document.getElementById('progress-fill').style.width = percentage + '%';
-    document.getElementById('progress-text').textContent = `线索: ${found}/${total}`;
+    document.getElementById('progress-text').textContent = `Clues: ${found}/${total}`;
 }
 
 // ===== Tool System =====
@@ -274,7 +251,6 @@ function activateTool(toolType, toolElement) {
     document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
 
     if (GAME_STATE.currentTool === toolType) {
-        // Deactivate if clicking same tool
         deactivateTool();
         return;
     }
@@ -282,19 +258,15 @@ function activateTool(toolType, toolElement) {
     GAME_STATE.currentTool = toolType;
     toolElement.classList.add('active');
 
-    // Remove previous tool effects
-    removeToolEffects();
-
     // Apply tool-specific effects
     switch(toolType) {
         case 'flashlight':
-            activateFlashlight();
+            if (crimeScene3D) {
+                crimeScene3D.toggleFlashlight(true);
+            }
             soundSystem.flashlightSound();
             break;
         case 'magnifier':
-            activateMagnifier();
-            soundSystem.clickSound();
-            break;
         case 'camera':
             soundSystem.cameraSound();
             break;
@@ -309,56 +281,10 @@ function activateTool(toolType, toolElement) {
 function deactivateTool() {
     GAME_STATE.currentTool = null;
     document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
-    removeToolEffects();
-}
 
-function removeToolEffects() {
-    // Remove flashlight
-    document.querySelector('.scene-container')?.classList.remove('flashlight-active');
-    document.querySelector('.flashlight-beam')?.remove();
-
-    // Remove magnifier
-    document.querySelector('.magnifier')?.remove();
-}
-
-function activateFlashlight() {
-    const sceneContainer = document.querySelector('.scene-container');
-    sceneContainer.classList.add('flashlight-active');
-
-    const beam = document.createElement('div');
-    beam.className = 'flashlight-beam';
-    document.body.appendChild(beam);
-
-    sceneContainer.addEventListener('mousemove', handleFlashlightMove);
-
-    // Reveal hidden clues
-    const hiddenHotspots = document.querySelectorAll('.hotspot.hidden');
-    hiddenHotspots.forEach(hotspot => {
-        hotspot.classList.add('flashlight-visible');
-    });
-}
-
-function handleFlashlightMove(e) {
-    const beam = document.querySelector('.flashlight-beam');
-    if (beam) {
-        beam.style.left = e.clientX + 'px';
-        beam.style.top = e.clientY + 'px';
-    }
-}
-
-function activateMagnifier() {
-    const magnifier = document.createElement('div');
-    magnifier.className = 'magnifier';
-    document.body.appendChild(magnifier);
-
-    document.addEventListener('mousemove', handleMagnifierMove);
-}
-
-function handleMagnifierMove(e) {
-    const magnifier = document.querySelector('.magnifier');
-    if (magnifier) {
-        magnifier.style.left = e.clientX + 'px';
-        magnifier.style.top = e.clientY + 'px';
+    // Turn off flashlight
+    if (crimeScene3D) {
+        crimeScene3D.toggleFlashlight(false);
     }
 }
 
@@ -463,18 +389,18 @@ function showResult(isCorrect) {
     if (isCorrect) {
         soundSystem.successSound();
         resultIcon.textContent = '✅';
-        resultTitle.textContent = '案件已结！';
+        resultTitle.textContent = 'Case Solved!';
         resultTitle.style.color = '#00ff00';
-        resultMessage.textContent = `破案成功！凶手是${GAME_STATE.currentCase.solution.culprit}，动机：${GAME_STATE.currentCase.solution.motive}`;
+        resultMessage.textContent = `Success! The culprit is ${GAME_STATE.currentCase.solution.culprit}. Motive: ${GAME_STATE.currentCase.solution.motive}`;
 
         // Mark case as solved
         GAME_STATE.solvedCases.push(GAME_STATE.currentCase.id);
     } else {
         soundSystem.errorSound();
         resultIcon.textContent = '❌';
-        resultTitle.textContent = '推理有误';
+        resultTitle.textContent = 'Inconclusive';
         resultTitle.style.color = '#ff4444';
-        resultMessage.textContent = '你的推理还不够完整，再仔细查看线索吧！';
+        resultMessage.textContent = 'Your deduction is incomplete. Review the evidence carefully!';
     }
 
     resultModal.classList.add('active');
@@ -503,15 +429,7 @@ function returnToOffice() {
     showPage('police-office');
 
     // Reinitialize office
-    const caseFiles = document.querySelectorAll('.case-file');
-    caseFiles.forEach(file => {
-        file.classList.remove('selected', 'opened', 'selectable', 'shuffling');
-        const details = file.querySelector('.file-details');
-        details.style.display = 'none';
-        details.textContent = '';
-    });
-
-    initializePoliceOffice();
+    GAME_STATE.availableCases = CASES.filter(c => !GAME_STATE.solvedCases.includes(c.id));
 }
 
 // ===== Back to Office Button =====
@@ -520,7 +438,7 @@ function initializeBackButton() {
     backBtn.addEventListener('click', () => {
         soundSystem.clickSound();
 
-        if (confirm('确定要返回办公室吗？当前进度将丢失。')) {
+        if (confirm('Return to office? Current progress will be lost.')) {
             returnToOffice();
         }
     });
@@ -539,23 +457,23 @@ function showEnding() {
     setTimeout(() => soundSystem.successSound(), 600);
 
     resultIcon.textContent = '🏆';
-    resultTitle.textContent = '全部案件已破！';
+    resultTitle.textContent = 'All Cases Solved!';
     resultTitle.style.color = '#d4af37';
     resultMessage.innerHTML = `
-        <strong>恭喜你，神探！</strong><br><br>
-        你成功破解了所有6个案件！<br>
-        这些看似独立的案件，背后或许隐藏着更大的阴谋...<br><br>
-        <em>感谢游玩！</em>
+        <strong>Congratulations, Detective!</strong><br><br>
+        You've successfully solved all 6 cases!<br>
+        These seemingly unrelated cases may hide a larger conspiracy...<br><br>
+        <em>Thanks for playing!</em>
     `;
 
-    continueBtn.textContent = '重新开始';
+    continueBtn.textContent = 'Restart Game';
     continueBtn.onclick = () => {
         // Reset game
         GAME_STATE.solvedCases = [];
         GAME_STATE.availableCases = [...CASES];
         resultModal.classList.remove('active');
         returnToOffice();
-        continueBtn.textContent = '继续调查';
+        continueBtn.textContent = 'Continue Investigation';
     };
 
     resultModal.classList.add('active');
@@ -563,6 +481,11 @@ function showEnding() {
 
 // ===== Initialize Game =====
 function initializeGame() {
+    // Hide loading screen
+    setTimeout(() => {
+        document.getElementById('loading-screen').style.display = 'none';
+    }, 1500);
+
     // Initialize available cases
     GAME_STATE.availableCases = [...CASES];
 
@@ -574,9 +497,9 @@ function initializeGame() {
     initializeResultModal();
     initializeBackButton();
 
-    console.log('🔍 侦探游戏已启动！');
-    console.log(`📁 可调查案件数: ${CASES.length}`);
+    console.log('🔍 3D Detective Game initialized!');
+    console.log(`📁 Cases available: ${CASES.length}`);
 }
 
 // Start game when page loads
-document.addEventListener('DOMContentLoaded', initializeGame);
+window.addEventListener('DOMContentLoaded', initializeGame);

@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>侦探游戏 - Detective Game</title>
+    <title>3D Detective Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Page 1: Police Office -->
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>🔍 Detective Game</h1>
+            <div class="loading-spinner"></div>
+            <p>Loading 3D Environment...</p>
+        </div>
+    </div>
+
+    <!-- Page 1: 3D Police Office -->
     <div id="police-office" class="page active">
-        <div class="office-background">
+        <canvas id="office-canvas"></canvas>
+
+        <div class="ui-overlay">
             <div class="detective-id">
                 <div class="id-card">
                     <div class="id-label">Detective ID</div>
@@ -17,101 +28,73 @@
                 </div>
             </div>
 
-            <div class="desk">
-                <h1 class="title">未结案件档案室</h1>
-                <div class="case-files-container">
-                    <div class="case-file" data-case="A">
-                        <div class="file-cover">
-                            <div class="file-label">档案 A</div>
-                            <div class="file-details"></div>
-                            <div class="coffee-stain"></div>
-                        </div>
-                    </div>
-                    <div class="case-file" data-case="B">
-                        <div class="file-cover">
-                            <div class="file-label">档案 B</div>
-                            <div class="file-details"></div>
-                            <div class="blood-stain"></div>
-                        </div>
-                    </div>
-                    <div class="case-file" data-case="C">
-                        <div class="file-cover">
-                            <div class="file-label">档案 C</div>
-                            <div class="file-details"></div>
-                        </div>
-                    </div>
-                    <div class="case-file" data-case="D">
-                        <div class="file-cover">
-                            <div class="file-label">档案 D</div>
-                            <div class="file-details"></div>
-                            <div class="pen-mark"></div>
-                        </div>
-                    </div>
-                    <div class="case-file" data-case="E">
-                        <div class="file-cover">
-                            <div class="file-label">档案 E</div>
-                            <div class="file-details"></div>
-                            <div class="coffee-stain"></div>
-                        </div>
-                    </div>
-                    <div class="case-file" data-case="F">
-                        <div class="file-cover">
-                            <div class="file-label">档案 F</div>
-                            <div class="file-details"></div>
-                        </div>
-                    </div>
-                </div>
-                <button id="start-investigation" class="start-btn">开始调查</button>
+            <div class="office-ui">
+                <h1 class="title">UNSOLVED CASES ARCHIVE</h1>
+                <p class="subtitle">Click on a case file to begin investigation</p>
+                <button id="start-investigation" class="start-btn">START INVESTIGATION</button>
+            </div>
+
+            <!-- Controls hint -->
+            <div class="controls-hint">
+                <p>🖱️ Mouse: Look Around</p>
+                <p>⚙️ Scroll: Zoom</p>
             </div>
 
             <!-- Background ambient elements -->
             <div class="ambient-sounds">
-                <div class="sound-indicator ac-sound">🌀 空调</div>
-                <div class="sound-indicator keyboard-sound">⌨️ 键盘</div>
-                <div class="sound-indicator siren-sound">🚨 警笛</div>
+                <div class="sound-indicator ac-sound">🌀 Air Conditioning</div>
+                <div class="sound-indicator keyboard-sound">⌨️ Keyboard Typing</div>
+                <div class="sound-indicator siren-sound">🚨 Distant Sirens</div>
             </div>
         </div>
     </div>
 
-    <!-- Page 2: Crime Scene -->
+    <!-- Page 2: 3D Crime Scene -->
     <div id="crime-scene" class="page">
-        <div class="scene-container">
+        <canvas id="scene-canvas"></canvas>
+
+        <div class="ui-overlay">
             <div class="scene-header">
-                <div class="case-title" id="case-title">案件调查中...</div>
+                <div class="case-title" id="case-title">Investigating...</div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
-                    <span class="progress-text" id="progress-text">线索: 0/5</span>
+                    <span class="progress-text" id="progress-text">Clues: 0/5</span>
                 </div>
-                <button id="back-to-office" class="btn-back">← 返回办公室</button>
+                <button id="back-to-office" class="btn-back">← Back to Office</button>
             </div>
 
-            <!-- Crime scene image/background -->
-            <div class="scene-background" id="scene-background">
-                <!-- Interactive hotspots will be generated here -->
-            </div>
+            <!-- Crosshair for 3D interaction -->
+            <div class="crosshair" id="crosshair"></div>
 
             <!-- Tool Box -->
             <div class="toolbox" id="toolbox">
                 <button class="tool-icon" id="toggle-toolbox">🧰</button>
                 <div class="tools-panel" id="tools-panel">
-                    <button class="tool" data-tool="magnifier" title="放大镜">🔍</button>
-                    <button class="tool" data-tool="flashlight" title="手电筒">🔦</button>
-                    <button class="tool" data-tool="camera" title="相机">📸</button>
-                    <button class="tool" data-tool="gloves" title="手套">🧤</button>
-                    <button class="tool" data-tool="testube" title="化验瓶">🧪</button>
-                    <button class="tool" data-tool="notebook" title="记录本">📄</button>
+                    <button class="tool" data-tool="magnifier" title="Magnifying Glass">🔍</button>
+                    <button class="tool" data-tool="flashlight" title="Flashlight">🔦</button>
+                    <button class="tool" data-tool="camera" title="Camera">📸</button>
+                    <button class="tool" data-tool="gloves" title="Gloves">🧤</button>
+                    <button class="tool" data-tool="testube" title="Test Tube">🧪</button>
+                    <button class="tool" data-tool="notebook" title="Notebook">📄</button>
                 </div>
             </div>
 
             <!-- Evidence Board Button -->
-            <button class="evidence-btn" id="show-evidence">证物墙</button>
+            <button class="evidence-btn" id="show-evidence">Evidence Board</button>
+
+            <!-- 3D Controls hint -->
+            <div class="controls-hint">
+                <p>🖱️ Click: Collect Clues</p>
+                <p>🔄 Drag: Rotate View</p>
+                <p>⚙️ Scroll: Zoom</p>
+            </div>
         </div>
 
         <!-- Evidence Board Modal -->
         <div class="modal" id="evidence-modal">
             <div class="modal-content evidence-board">
                 <button class="close-modal" id="close-evidence">×</button>
-                <h2>证物墙</h2>
+                <h2>Evidence Board</h2>
                 <div class="evidence-grid" id="evidence-grid">
                     <!-- Evidence items will be added here -->
                 </div>
@@ -122,14 +105,14 @@
         <div class="modal" id="deduction-modal">
             <div class="modal-content deduction-board">
                 <button class="close-modal" id="close-deduction">×</button>
-                <h2>案件分析板</h2>
+                <h2>Case Analysis Board</h2>
                 <div class="clues-container" id="clues-container">
                     <!-- Clues for connecting will be shown here -->
                 </div>
                 <div class="deduction-area">
-                    <h3>推理结论</h3>
-                    <textarea id="conclusion-text" placeholder="输入你的推理..."></textarea>
-                    <button id="submit-conclusion" class="btn-submit">提交结论</button>
+                    <h3>Your Deduction</h3>
+                    <textarea id="conclusion-text" placeholder="Enter your deduction..."></textarea>
+                    <button id="submit-conclusion" class="btn-submit">Submit Conclusion</button>
                 </div>
             </div>
         </div>
@@ -140,12 +123,17 @@
                 <div class="result-icon" id="result-icon"></div>
                 <h2 id="result-title"></h2>
                 <p id="result-message"></p>
-                <button id="continue-btn" class="btn-continue">继续调查</button>
+                <button id="continue-btn" class="btn-continue">Continue Investigation</button>
             </div>
         </div>
     </div>
 
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
     <script src="cases.js"></script>
+    <script src="game3d.js"></script>
     <script src="game.js"></script>
 </body>
 </html>

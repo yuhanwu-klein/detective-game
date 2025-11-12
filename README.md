@@ -1,210 +1,247 @@
-# 🔍 侦探游戏 (Detective Game)
+# 🔍 3D Detective Game
 
-一款沉浸式的互动侦探推理游戏，玩家将扮演一名侦探，调查6个不同的悬疑案件。
+An immersive 3D interactive detective game where players investigate 6 different mysterious cases using Three.js rendering.
 
-## 🎮 游戏特色
+## 🎮 Game Features
 
-### 📋 第一页：警局办公室（档案选择界面）
-- 昏黄灯光下的警局办公室氛围
-- 6份悬疑案件档案等待调查
-- 档案上有咖啡渍、血迹、笔迹等细节
-- 鼠标悬停时档案会抖动，伴随翻纸音效
-- 随机案件选择系统
+### 📋 Page 1: Police Office (3D Case Selection)
+- Fully 3D rendered police office environment
+- Interactive 3D case file folders on desk
+- Ambient lighting with dim office atmosphere
+- Rotating camera controls with mouse
+- Realistic desk and office props
+- Random case selection system
 
-### 🔍 第二页：犯罪现场（案件互动页面）
-- 5种不同类型的犯罪现场：
-  - 💎 珠宝店失窃案
-  - 🏠 公寓凶杀案
-  - 🏛️ 博物馆抢劫案
-  - ⛵ 码头枪击案
-  - 🏰 古宅纵火案
-  - 🏦 银行抢劫案
+### 🔍 Page 2: Crime Scene (3D Investigation)
+- 6 different types of crime scenes in 3D:
+  - 💎 Jewelry Store Theft
+  - 🏠 Apartment Murder
+  - 🏛️ Museum Robbery
+  - ⛵ Dock Shooting
+  - 🏰 Mansion Arson
+  - 🏦 Bank Heist
 
-### 🧰 工具系统
-玩家可使用以下专业侦探工具：
+### 🧰 Tool System
+Players can use professional detective tools:
 
-| 工具 | 功能 |
-|------|------|
-| 🔍 放大镜 | 放大局部细节，发现指纹、划痕等微小线索 |
-| 🔦 手电筒 | 照亮暗处，发现隐藏物（血迹、信件等） |
-| 📸 相机 | 拍摄线索，添加到证物墙 |
-| 🧤 手套 | 拾取证物，防止污染现场 |
-| 🧪 化验瓶 | 对液体或粉末样本进行初步分析 |
-| 📄 记录本 | 整理已发现线索与推理笔记 |
+| Tool | Function |
+|------|----------|
+| 🔍 Magnifying Glass | Zoom in on details, find fingerprints and scratches |
+| 🔦 Flashlight | Illuminate dark areas, reveal hidden clues |
+| 📸 Camera | Photograph evidence, add to evidence board |
+| 🧤 Gloves | Collect physical evidence without contamination |
+| 🧪 Test Tube | Analyze liquid or powder samples |
+| 📄 Notebook | Organize discovered clues and deductions |
 
-### 🎧 氛围设计
-- 动态音效系统（空调声、键盘敲击、警笛声）
-- 不同案件类型配备专属背景音效
-- 工具使用音效（放大镜咔哒声、相机快门声、手电筒开关声）
+### 🎧 Atmosphere Design
+- Dynamic sound effects system (AC, keyboard typing, distant sirens)
+- Case-specific ambient sound effects
+- Tool usage sounds (magnifier click, camera shutter, flashlight switch)
+- Web Audio API powered audio system
 
-### 🧠 推理系统
-- 收集线索完成度显示
-- 证物墙系统记录所有发现的证据
-- 案件分析板用于整理推理
-- 提交推理结论，判断破案成功与否
+### 🧠 Deduction System
+- Clue collection progress tracking
+- Evidence board system to record all findings
+- Case analysis board for organizing deductions
+- Submit conclusions to solve cases
 
-## 🚀 如何开始
+### 🎨 3D Graphics
+- Three.js powered 3D rendering
+- Real-time lighting and shadows
+- Interactive 3D objects with raycasting
+- Orbit controls for camera movement
+- Dynamic clue markers in 3D space
 
-### 方法一：直接打开
-1. 下载所有文件到同一文件夹
-2. 用浏览器打开 `index.html`
-3. 开始你的侦探之旅！
+## 🚀 Getting Started
 
-### 方法二：本地服务器
+### Method 1: Direct Open
+1. Download all files to the same folder
+2. Open `index.html` in a modern web browser
+3. Start your detective journey!
+
+### Method 2: Local Server (Recommended)
 ```bash
-# 使用 Python 启动本地服务器
+# Using Python
 python -m http.server 8000
 
-# 或使用 Node.js
+# Or using Node.js
 npx http-server
 ```
 
-然后在浏览器访问 `http://localhost:8000`
+Then visit `http://localhost:8000` in your browser
 
-## 🎯 游戏玩法
+## 🎯 How to Play
 
-### 步骤 1: 选择案件
-1. 点击"开始调查"按钮
-2. 档案会被随机打乱
-3. 点击任意档案查看案件类型
-4. 系统随机选定一份档案，自动进入案件现场
+### Step 1: Select a Case
+1. Click "START INVESTIGATION" button
+2. Case files will be shuffled
+3. Click on any 3D file folder
+4. System randomly selects a case and enters crime scene
 
-### 步骤 2: 搜集线索
-1. 点击右下角🧰工具箱图标
-2. 选择合适的工具
-3. 在犯罪现场中寻找互动热点（闪烁的圆圈）
-4. 使用正确的工具收集线索
-5. 某些线索需要特定工具才能发现（如手电筒照亮暗处）
+### Step 2: Collect Clues
+1. Click the 🧰 toolbox icon (bottom right)
+2. Select the appropriate tool
+3. Look for interactive hotspots in the 3D scene (glowing spheres)
+4. Use the correct tool to collect each clue
+5. Some clues are hidden and need flashlight to reveal
 
-### 步骤 3: 分析推理
-1. 收集足够线索后，系统会自动弹出"案件分析板"
-2. 查看所有收集到的线索
-3. 在推理结论框中输入你的分析
-4. 提交结论
+### Step 3: Analyze and Deduce
+1. After collecting enough clues, the "Case Analysis Board" appears
+2. Review all collected evidence
+3. Enter your deduction in the text box
+4. Submit your conclusion
 
-### 步骤 4: 查看结果
-- ✅ **破案成功**：档案标记为"已结案"，解锁下一个案件
-- ❌ **推理有误**：可以继续收集线索或重新推理
+### Step 4: View Results
+- ✅ **Case Solved**: File marked as "Closed", proceed to next case
+- ❌ **Inconclusive**: Continue collecting evidence or re-analyze
 
-### 步骤 5: 继续调查
-- 返回办公室，选择下一个案件
-- 完成所有6个案件，解锁最终结局
+### Step 5: Continue Investigation
+- Return to office and select the next case
+- Complete all 6 cases to unlock the final ending
 
-## 🎨 技术栈
+## 🕹️ Controls
 
-- **HTML5** - 游戏结构
-- **CSS3** - 视觉效果与动画
-- **Vanilla JavaScript** - 游戏逻辑
-- **Web Audio API** - 音效系统
+### Police Office
+- **Mouse**: Look around the office
+- **Scroll**: Zoom in/out
+- **Left Click**: Select case file
 
-## 🎮 游戏机制
+### Crime Scene
+- **Mouse Drag**: Rotate camera view
+- **Scroll**: Zoom in/out
+- **Left Click**: Interact with clues
+- **Toolbox Button**: Open tool selection
 
-### 案件系统
-- 6个独立的案件，每个案件有5个线索
-- 每个线索需要特定工具才能收集
-- 某些线索默认隐藏，需要手电筒照亮才能发现
+## 🎨 Technical Stack
 
-### 推理判定
-推理结论需要包含案件的关键词才能破案成功。例如：
-- "珠宝店失窃案" 需要推理出是"内部员工"作案
-- "公寓凶杀案" 需要发现"侄女"为了"遗产"使用"毒药"
+- **HTML5** - Game structure
+- **CSS3** - Visual effects and animations
+- **Vanilla JavaScript** - Game logic
+- **Three.js** - 3D rendering engine
+- **Web Audio API** - Sound system
 
-### 进度追踪
-- 实时显示线索收集进度（如：3/5）
-- 证物墙保存所有已收集的证据
-- 已破案件会被标记，不会重复出现
+## 🎮 Game Mechanics
 
-## 📱 兼容性
+### Case System
+- 6 independent cases, each with 5 clues
+- Each clue requires a specific tool to collect
+- Some clues are hidden by default and need flashlight to reveal
+- 3D clue objects positioned in the scene
 
-- ✅ 现代浏览器（Chrome, Firefox, Safari, Edge）
-- ✅ 响应式设计，支持平板和桌面设备
-- ⚠️ 需要启用JavaScript和Web Audio API
+### Deduction Validation
+Conclusions must contain keywords to solve the case. For example:
+- "Jewelry Store Theft" requires identifying "inside employee"
+- "Apartment Murder" needs to discover "niece" used "poison" for "inheritance"
 
-## 🎯 游戏提示
+### Progress Tracking
+- Real-time clue collection progress (e.g., 3/5)
+- Evidence board saves all collected evidence
+- Solved cases are marked and won't reappear
 
-1. **仔细观察**：每个案件现场都有5个线索热点
-2. **工具匹配**：注意哪些线索需要哪些工具
-3. **手电筒很重要**：某些线索隐藏在暗处
-4. **推理关键词**：注意案件中的关键信息（人物关系、动机、手法）
-5. **证物墙**：可以随时查看已收集的证据
+## 📱 Compatibility
 
-## 🔧 文件结构
+- ✅ Modern browsers (Chrome, Firefox, Safari, Edge)
+- ✅ Requires WebGL support
+- ✅ Desktop and tablet devices
+- ⚠️ Requires JavaScript and Web Audio API enabled
+
+## 🎯 Game Tips
+
+1. **Observe Carefully**: Each scene has 5 clue hotspots in 3D space
+2. **Tool Matching**: Pay attention to which tool each clue requires
+3. **Flashlight is Key**: Some clues are hidden in dark areas
+4. **Look for Keywords**: Note key information (relationships, motives, methods)
+5. **Evidence Board**: Review collected evidence anytime
+6. **Camera Controls**: Use mouse to rotate and zoom for better views
+
+## 🔧 File Structure
 
 ```
 detective-game/
-├── index.html          # 主HTML文件
-├── styles.css          # 样式表
-├── game.js            # 游戏主逻辑
-├── cases.js           # 案件数据
-└── README.md          # 说明文档
+├── index.html          # Main HTML file with 3D canvas
+├── styles.css          # Stylesheet with 3D UI overlays
+├── game3d.js          # Three.js 3D rendering engine
+├── game.js            # Game main logic
+├── cases.js           # Case data
+└── README.md          # Documentation
 ```
 
-## 🎨 可扩展功能（未来计划）
+## 🎨 Expandable Features (Future Plans)
 
-- 🔒 隐藏彩蛋：某些档案间有共同的嫌疑人
-- 🧩 时间机制：限定时间调查
-- 🗝️ 物品互动：某案件的线索在另一个案件中出现
-- 📜 主谋真相：六案全破后解锁最终真相
-- 💾 进度保存：支持保存游戏进度
-- 🌐 多语言支持：英文版本
-- 🎵 背景音乐：更丰富的音效系统
+- 🔒 Hidden easter eggs: Common suspects across cases
+- 🧩 Time limit: Timed investigation mode
+- 🗝️ Object interaction: Clues appear in multiple cases
+- 📜 Master truth: Final revelation after solving all cases
+- 💾 Save progress: Support for game progress saving
+- 🌐 Multiplayer: Cooperative investigation mode
+- 🎵 Background music: Richer audio system
+- 🏆 Achievement system: Unlock badges and rewards
 
-## 📝 开发说明
+## 📝 Development Notes
 
-### 添加新案件
+### Adding New Cases
 
-在 `cases.js` 中添加新的案件对象：
+Add a new case object in `cases.js`:
 
 ```javascript
 {
     id: 'your-case-id',
-    type: '案件类型',
-    title: '案件标题',
-    description: '案件描述',
+    type: 'Case Type',
+    title: 'Case Title',
+    description: 'Case description',
     sceneClass: 'scene-classname',
+    sceneColor: 0x123456,
     clues: [
         {
             id: 'clue-id',
-            name: '线索名称',
-            description: '线索描述',
+            name: 'Clue Name',
+            description: 'Clue description',
             icon: '🔍',
-            position: { left: '50%', top: '50%' },
+            position: { x: 0, y: 1, z: 0 },
             tool: 'magnifier',
             hidden: false
         }
     ],
     solution: {
-        culprit: '凶手',
-        motive: '动机',
-        keywords: ['关键词1', '关键词2']
+        culprit: 'Perpetrator',
+        motive: 'Motive',
+        keywords: ['keyword1', 'keyword2']
     }
 }
 ```
 
-### 自定义样式
+### Customizing 3D Scenes
 
-在 `styles.css` 中添加新的场景背景：
+Modify the `createRoom()` and `addRoomProps()` methods in `game3d.js` to add custom 3D objects and lighting.
 
-```css
-.scene-your-scene {
-    background: linear-gradient(...),
-                url('your-background.jpg');
-}
-```
+### Performance Optimization
 
-## 🐛 已知问题
+- Adjust shadow quality in `game3d.js`
+- Reduce polygon count for complex scenes
+- Use texture compression for larger projects
 
-- 音效在某些浏览器可能需要用户交互后才能播放
-- 移动设备触摸体验还需优化
+## 🐛 Known Issues
 
-## 📄 许可证
+- Sound effects may require user interaction before playing in some browsers
+- Mobile touch controls need optimization
+- Performance may vary on older devices
 
-本项目仅供学习和娱乐使用。
+## 📄 License
 
-## 👨‍💻 作者
+This project is for educational and entertainment purposes only.
 
-Detective Game - 沉浸式侦探推理游戏
+## 👨‍💻 Technology
+
+**3D Detective Game** - Built with Three.js
+
+**Key Technologies:**
+- Three.js r128 - 3D rendering
+- OrbitControls - Camera controls
+- Raycaster - 3D object interaction
+- Web Audio API - Sound system
 
 ---
 
-**祝你破案愉快！🕵️‍♂️**
+**Enjoy solving the cases, Detective! 🕵️‍♂️**
+
+*Drag to look around, click to investigate, and solve the mystery!*

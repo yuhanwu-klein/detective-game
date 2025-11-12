@@ -12,6 +12,12 @@ body {
     overflow: hidden;
 }
 
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 .page {
     display: none;
     width: 100vw;
@@ -25,33 +31,78 @@ body {
     display: block;
 }
 
-/* ===== Page 1: Police Office ===== */
-#police-office {
-    background: linear-gradient(135deg, #2c2416 0%, #1a1612 100%);
-    position: relative;
-}
-
-.office-background {
+/* ===== Loading Screen ===== */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-image:
-        radial-gradient(circle at 20% 50%, rgba(255, 200, 100, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 30%, rgba(255, 200, 100, 0.05) 0%, transparent 40%);
+    background: linear-gradient(135deg, #1a1612 0%, #2c2416 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
 }
 
+.loading-content {
+    text-align: center;
+}
+
+.loading-content h1 {
+    font-size: 48px;
+    color: #d4af37;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(212, 175, 55, 0.3);
+    border-top-color: #d4af37;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-content p {
+    font-size: 18px;
+    color: #999;
+}
+
+/* ===== UI Overlay (for 3D scenes) ===== */
+.ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.ui-overlay > * {
+    pointer-events: auto;
+}
+
+/* ===== Detective ID Card ===== */
 .detective-id {
     position: absolute;
     top: 20px;
     right: 30px;
-    z-index: 10;
 }
 
 .id-card {
-    background: rgba(40, 40, 40, 0.9);
+    background: rgba(40, 40, 40, 0.95);
     border: 2px solid #8b7355;
     padding: 15px 20px;
     border-radius: 5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
 }
 
 .id-label {
@@ -67,134 +118,27 @@ body {
     letter-spacing: 2px;
 }
 
-.desk {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
+/* ===== Police Office UI ===== */
+.office-ui {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .title {
-    font-size: 42px;
+    font-size: 48px;
     color: #d4af37;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-    margin-bottom: 50px;
-    letter-spacing: 3px;
+    margin-bottom: 20px;
+    letter-spacing: 4px;
 }
 
-.case-files-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-bottom: 50px;
-    max-width: 1000px;
-}
-
-.case-file {
-    width: 250px;
-    height: 320px;
-    perspective: 1000px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.case-file:hover {
-    transform: translateY(-10px) rotate(1deg);
-    animation: file-shake 0.5s ease-in-out;
-}
-
-@keyframes file-shake {
-    0%, 100% { transform: translateY(-10px) rotate(0deg); }
-    25% { transform: translateY(-10px) rotate(-2deg); }
-    75% { transform: translateY(-10px) rotate(2deg); }
-}
-
-.file-cover {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
-    border: 3px solid #8b6f47;
-    border-radius: 5px;
-    padding: 20px;
-    position: relative;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
-}
-
-.case-file.shuffling {
-    animation: shuffle 0.5s ease-in-out;
-}
-
-@keyframes shuffle {
-    0%, 100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-20px) rotate(-5deg); }
-    50% { transform: translateX(20px) rotate(5deg); }
-    75% { transform: translateX(-10px) rotate(-2deg); }
-}
-
-.case-file.selected .file-cover {
-    transform: rotateY(15deg);
-    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
-}
-
-.case-file.opened .file-cover {
-    transform: rotateY(90deg);
-}
-
-.file-label {
-    font-size: 28px;
-    font-weight: bold;
-    color: #2c2416;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.file-details {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 15px;
-    border-radius: 3px;
-    min-height: 100px;
-    font-size: 14px;
-    color: #333;
-    display: none;
-}
-
-.case-file.opened .file-details {
-    display: block;
-}
-
-/* Stain effects */
-.coffee-stain {
-    position: absolute;
-    bottom: 30px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle, rgba(101, 67, 33, 0.4) 0%, transparent 70%);
-    border-radius: 50%;
-}
-
-.blood-stain {
-    position: absolute;
-    top: 40px;
-    left: 25px;
-    width: 30px;
-    height: 30px;
-    background: radial-gradient(circle, rgba(139, 0, 0, 0.3) 0%, transparent 70%);
-    border-radius: 50%;
-}
-
-.pen-mark {
-    position: absolute;
-    top: 50%;
-    left: 20px;
-    width: 80px;
-    height: 2px;
-    background: rgba(0, 0, 139, 0.4);
-    transform: rotate(-15deg);
+.subtitle {
+    font-size: 18px;
+    color: #999;
+    margin-bottom: 30px;
 }
 
 .start-btn {
@@ -220,11 +164,28 @@ body {
     transform: translateY(0);
 }
 
-/* Ambient sounds indicators */
+/* ===== Controls Hint ===== */
+.controls-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #666;
+}
+
+.controls-hint p {
+    font-size: 14px;
+    color: #ccc;
+    margin: 5px 0;
+}
+
+/* ===== Ambient Sounds Indicator ===== */
 .ambient-sounds {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 120px;
+    left: 30px;
 }
 
 .sound-indicator {
@@ -248,29 +209,18 @@ body {
     50% { opacity: 0.7; }
 }
 
-/* ===== Page 2: Crime Scene ===== */
-#crime-scene {
-    background: #0a0a0a;
-}
-
-.scene-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
+/* ===== Crime Scene UI ===== */
 .scene-header {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     padding: 20px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 2px solid #d4af37;
-    z-index: 100;
 }
 
 .case-title {
@@ -318,6 +268,7 @@ body {
     cursor: pointer;
     font-family: 'Courier New', monospace;
     transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 .btn-back:hover {
@@ -325,79 +276,33 @@ body {
     border-color: #d4af37;
 }
 
-.scene-background {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-/* Crime scene backgrounds */
-.scene-jewelry {
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect fill="%23654321" width="1000" height="600"/><rect fill="%23333" x="300" y="200" width="400" height="300" opacity="0.3"/></svg>');
-}
-
-.scene-apartment {
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect fill="%23463020" width="1000" height="600"/></svg>');
-}
-
-.scene-museum {
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect fill="%232c2c2c" width="1000" height="600"/></svg>');
-}
-
-.scene-dock {
-    background: linear-gradient(rgba(0, 0, 30, 0.6), rgba(0, 0, 0, 0.8)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect fill="%23001a33" width="1000" height="600"/></svg>');
-}
-
-.scene-mansion {
-    background: linear-gradient(rgba(40, 20, 0, 0.5), rgba(0, 0, 0, 0.7)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect fill="%231a0f00" width="1000" height="600"/></svg>');
-}
-
-/* Interactive hotspots */
-.hotspot {
+/* ===== Crosshair (for 3D interaction) ===== */
+.crosshair {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(212, 175, 55, 0.7);
     border-radius: 50%;
-    border: 2px dashed rgba(212, 175, 55, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    animation: hotspot-pulse 2s ease-in-out infinite;
-}
-
-.hotspot:hover {
-    border-color: rgba(212, 175, 55, 1);
-    background: rgba(212, 175, 55, 0.2);
-}
-
-.hotspot.found {
-    border-color: rgba(50, 200, 50, 0.8);
-    animation: none;
-}
-
-@keyframes hotspot-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.1); opacity: 1; }
-}
-
-.hotspot.hidden {
-    opacity: 0;
     pointer-events: none;
+    opacity: 0.5;
 }
 
-.hotspot.flashlight-visible {
-    opacity: 1;
-    pointer-events: auto;
-    border-color: rgba(255, 255, 100, 0.8);
+.crosshair::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: #d4af37;
+    border-radius: 50%;
 }
 
-/* Tool Box */
+/* ===== Tool Box ===== */
 .toolbox {
     position: fixed;
     bottom: 30px;
@@ -425,14 +330,14 @@ body {
     position: absolute;
     bottom: 85px;
     right: 0;
-    background: rgba(20, 20, 20, 0.95);
+    background: rgba(20, 20, 20, 0.98);
     border: 2px solid #d4af37;
     border-radius: 15px;
     padding: 15px;
     display: none;
     flex-direction: column;
     gap: 10px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
 }
 
 .tools-panel.active {
@@ -465,16 +370,16 @@ body {
 .tool.active {
     background: rgba(212, 175, 55, 0.3);
     border-color: #d4af37;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
 }
 
-/* Evidence Board Button */
+/* ===== Evidence Board Button ===== */
 .evidence-btn {
     position: fixed;
     top: 100px;
     right: 30px;
     padding: 12px 25px;
-    background: rgba(139, 0, 0, 0.8);
+    background: rgba(139, 0, 0, 0.9);
     border: 2px solid #8b0000;
     color: #fff;
     font-size: 16px;
@@ -488,10 +393,10 @@ body {
 
 .evidence-btn:hover {
     background: rgba(139, 0, 0, 1);
-    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.7);
 }
 
-/* Modals */
+/* ===== Modals ===== */
 .modal {
     display: none;
     position: fixed;
@@ -499,7 +404,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -524,6 +429,7 @@ body {
     max-height: 90%;
     overflow-y: auto;
     position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
 }
 
 .close-modal {
@@ -550,7 +456,7 @@ body {
     text-align: center;
 }
 
-/* Evidence Grid */
+/* ===== Evidence Grid ===== */
 .evidence-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -577,17 +483,19 @@ body {
 }
 
 .evidence-name {
-    font-size: 14px;
+    font-size: 16px;
     color: #e0e0e0;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
 .evidence-desc {
-    font-size: 12px;
-    color: #999;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.4;
 }
 
-/* Deduction Board */
+/* ===== Deduction Board ===== */
 .deduction-board {
     min-width: 700px;
 }
@@ -606,6 +514,7 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 .clue-item:hover {
@@ -619,7 +528,7 @@ body {
 }
 
 .deduction-area {
-    background: rgba(40, 40, 40, 0.8);
+    background: rgba(40, 40, 40, 0.9);
     padding: 25px;
     border-radius: 10px;
     border: 2px solid #666;
@@ -628,6 +537,7 @@ body {
 .deduction-area h3 {
     color: #d4af37;
     margin-bottom: 15px;
+    font-size: 20px;
 }
 
 #conclusion-text {
@@ -664,10 +574,10 @@ body {
 
 .btn-submit:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
 }
 
-/* Result Modal */
+/* ===== Result Modal ===== */
 .result-content {
     text-align: center;
     max-width: 500px;
@@ -705,67 +615,95 @@ body {
 
 .btn-continue:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
 }
 
-/* Flashlight Effect */
-.flashlight-active {
-    cursor: none;
-}
-
-.flashlight-beam {
-    position: fixed;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 200, 0.3) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 999;
-    transform: translate(-50%, -50%);
-}
-
-/* Magnifier Effect */
-.magnifier {
-    position: fixed;
-    width: 200px;
-    height: 200px;
-    border: 5px solid #d4af37;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 999;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-}
-
-/* Responsive Design */
+/* ===== Responsive Design ===== */
 @media (max-width: 1024px) {
-    .case-files-container {
-        grid-template-columns: repeat(2, 1fr);
+    .title {
+        font-size: 36px;
     }
 
-    .case-file {
-        width: 200px;
-        height: 280px;
+    .deduction-board {
+        min-width: 90vw;
+    }
+
+    .scene-header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .progress-bar {
+        max-width: 200px;
+        margin: 0 15px;
     }
 }
 
 @media (max-width: 768px) {
     .title {
         font-size: 28px;
+        letter-spacing: 2px;
     }
 
-    .case-files-container {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    .subtitle {
+        font-size: 14px;
     }
 
-    .case-file {
-        width: 150px;
-        height: 220px;
+    .start-btn {
+        font-size: 16px;
+        padding: 14px 35px;
     }
 
-    .deduction-board {
-        min-width: 90vw;
+    .case-title {
+        font-size: 18px;
     }
+
+    .controls-hint {
+        font-size: 12px;
+        padding: 10px 15px;
+    }
+
+    .toolbox {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+    }
+
+    .evidence-btn {
+        top: 80px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        padding: 30px 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 24px;
+    }
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f0d77a;
 }
