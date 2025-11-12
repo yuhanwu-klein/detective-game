@@ -68,13 +68,22 @@ class Scene3D {
             if (obj.userData.isClue && !obj.userData.found) {
                 obj.scale.set(1, 1, 1);
             }
+            if (obj.userData.isCaseFile) {
+                obj.scale.set(1, 1, 1);
+            }
         });
 
         // Highlight intersected object
         if (intersects.length > 0) {
             const object = intersects[0].object;
-            if (object.userData.isClue && !object.userData.found) {
-                object.scale.set(1.2, 1.2, 1.2);
+            // Check for parent group (case files are groups)
+            const targetObject = object.parent && object.parent.userData ? object.parent : object;
+
+            if (targetObject.userData.isClue && !targetObject.userData.found) {
+                targetObject.scale.set(1.2, 1.2, 1.2);
+                this.canvas.style.cursor = 'pointer';
+            } else if (targetObject.userData.isCaseFile) {
+                targetObject.scale.set(1.1, 1.1, 1.1);
                 this.canvas.style.cursor = 'pointer';
             } else {
                 this.canvas.style.cursor = 'default';
@@ -90,10 +99,13 @@ class Scene3D {
 
         if (intersects.length > 0) {
             const object = intersects[0].object;
-            if (object.userData.isClue && !object.userData.found) {
-                this.onClueClick(object.userData.clueData);
-            } else if (object.userData.isCaseFile) {
-                this.onCaseFileClick(object.userData.caseIndex);
+            // Check for parent group (case files are groups)
+            const targetObject = object.parent && object.parent.userData ? object.parent : object;
+
+            if (targetObject.userData.isClue && !targetObject.userData.found) {
+                this.onClueClick(targetObject.userData.clueData);
+            } else if (targetObject.userData.isCaseFile) {
+                this.onCaseFileClick(targetObject.userData.caseIndex);
             }
         }
     }
@@ -246,7 +258,9 @@ class PoliceOfficeScene extends Scene3D {
         const folderGeometry = new THREE.BoxGeometry(0.6, 0.01, 0.8);
         const folderMaterial = new THREE.MeshStandardMaterial({
             color: 0xd4a574,
-            roughness: 0.7
+            roughness: 0.7,
+            emissive: 0xd4af37,
+            emissiveIntensity: 0.1
         });
         const folderBack = new THREE.Mesh(folderGeometry, folderMaterial);
         folderBack.castShadow = true;

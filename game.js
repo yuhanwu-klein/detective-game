@@ -108,26 +108,10 @@ function initializePoliceOffice() {
     officeScene = new PoliceOfficeScene('office-canvas');
     officeScene.onCaseFileClick = selectCaseFrom3D;
 
-    const startBtn = document.getElementById('start-investigation');
-
     // Reset available cases
     GAME_STATE.availableCases = CASES.filter(c => !GAME_STATE.solvedCases.includes(c.id));
 
-    startBtn.addEventListener('click', () => {
-        soundSystem.clickSound();
-        shuffleCases();
-    });
-
     officeScene.start();
-}
-
-function shuffleCases() {
-    officeScene.shuffleFiles();
-
-    setTimeout(() => {
-        // Enable clicking on files after shuffle
-        soundSystem.paperSound();
-    }, 1000);
 }
 
 function selectCaseFrom3D(caseIndex) {
