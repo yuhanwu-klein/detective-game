@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>侦探游戏 - Detective Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Page 1: Police Office -->
+    <div id="police-office" class="page active">
+        <div class="office-background">
+            <div class="detective-id">
+                <div class="id-card">
+                    <div class="id-label">Detective ID</div>
+                    <div class="id-number">#<span id="detective-number">47821</span></div>
+                </div>
+            </div>
+
+            <div class="desk">
+                <h1 class="title">未结案件档案室</h1>
+                <div class="case-files-container">
+                    <div class="case-file" data-case="A">
+                        <div class="file-cover">
+                            <div class="file-label">档案 A</div>
+                            <div class="file-details"></div>
+                            <div class="coffee-stain"></div>
+                        </div>
+                    </div>
+                    <div class="case-file" data-case="B">
+                        <div class="file-cover">
+                            <div class="file-label">档案 B</div>
+                            <div class="file-details"></div>
+                            <div class="blood-stain"></div>
+                        </div>
+                    </div>
+                    <div class="case-file" data-case="C">
+                        <div class="file-cover">
+                            <div class="file-label">档案 C</div>
+                            <div class="file-details"></div>
+                        </div>
+                    </div>
+                    <div class="case-file" data-case="D">
+                        <div class="file-cover">
+                            <div class="file-label">档案 D</div>
+                            <div class="file-details"></div>
+                            <div class="pen-mark"></div>
+                        </div>
+                    </div>
+                    <div class="case-file" data-case="E">
+                        <div class="file-cover">
+                            <div class="file-label">档案 E</div>
+                            <div class="file-details"></div>
+                            <div class="coffee-stain"></div>
+                        </div>
+                    </div>
+                    <div class="case-file" data-case="F">
+                        <div class="file-cover">
+                            <div class="file-label">档案 F</div>
+                            <div class="file-details"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="start-investigation" class="start-btn">开始调查</button>
+            </div>
+
+            <!-- Background ambient elements -->
+            <div class="ambient-sounds">
+                <div class="sound-indicator ac-sound">🌀 空调</div>
+                <div class="sound-indicator keyboard-sound">⌨️ 键盘</div>
+                <div class="sound-indicator siren-sound">🚨 警笛</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Crime Scene -->
+    <div id="crime-scene" class="page">
+        <div class="scene-container">
+            <div class="scene-header">
+                <div class="case-title" id="case-title">案件调查中...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <span class="progress-text" id="progress-text">线索: 0/5</span>
+                </div>
+                <button id="back-to-office" class="btn-back">← 返回办公室</button>
+            </div>
+
+            <!-- Crime scene image/background -->
+            <div class="scene-background" id="scene-background">
+                <!-- Interactive hotspots will be generated here -->
+            </div>
+
+            <!-- Tool Box -->
+            <div class="toolbox" id="toolbox">
+                <button class="tool-icon" id="toggle-toolbox">🧰</button>
+                <div class="tools-panel" id="tools-panel">
+                    <button class="tool" data-tool="magnifier" title="放大镜">🔍</button>
+                    <button class="tool" data-tool="flashlight" title="手电筒">🔦</button>
+                    <button class="tool" data-tool="camera" title="相机">📸</button>
+                    <button class="tool" data-tool="gloves" title="手套">🧤</button>
+                    <button class="tool" data-tool="testube" title="化验瓶">🧪</button>
+                    <button class="tool" data-tool="notebook" title="记录本">📄</button>
+                </div>
+            </div>
+
+            <!-- Evidence Board Button -->
+            <button class="evidence-btn" id="show-evidence">证物墙</button>
+        </div>
+
+        <!-- Evidence Board Modal -->
+        <div class="modal" id="evidence-modal">
+            <div class="modal-content evidence-board">
+                <button class="close-modal" id="close-evidence">×</button>
+                <h2>证物墙</h2>
+                <div class="evidence-grid" id="evidence-grid">
+                    <!-- Evidence items will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Deduction Board Modal -->
+        <div class="modal" id="deduction-modal">
+            <div class="modal-content deduction-board">
+                <button class="close-modal" id="close-deduction">×</button>
+                <h2>案件分析板</h2>
+                <div class="clues-container" id="clues-container">
+                    <!-- Clues for connecting will be shown here -->
+                </div>
+                <div class="deduction-area">
+                    <h3>推理结论</h3>
+                    <textarea id="conclusion-text" placeholder="输入你的推理..."></textarea>
+                    <button id="submit-conclusion" class="btn-submit">提交结论</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Modal -->
+        <div class="modal" id="result-modal">
+            <div class="modal-content result-content">
+                <div class="result-icon" id="result-icon"></div>
+                <h2 id="result-title"></h2>
+                <p id="result-message"></p>
+                <button id="continue-btn" class="btn-continue">继续调查</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cases.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
